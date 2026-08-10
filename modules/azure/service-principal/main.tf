@@ -97,6 +97,14 @@ resource "azuread_application" "this" {
       }
     }
   }
+
+  lifecycle {
+    # Keep migration plans stable by ignoring metadata-only churn.
+    ignore_changes = [
+      description,
+      timeouts,
+    ]
+  }
 }
 
 resource "azuread_service_principal" "this" {
@@ -150,6 +158,13 @@ resource "azuread_application_federated_identity_credential" "this" {
   audiences      = each.value.audiences
   issuer         = each.value.issuer
   subject        = each.value.subject
+
+  lifecycle {
+    # Existing credentials often carry legacy descriptions; avoid replacing them.
+    ignore_changes = [
+      description,
+    ]
+  }
 
 }
 
