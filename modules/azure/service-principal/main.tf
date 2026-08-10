@@ -103,6 +103,8 @@ resource "azuread_application" "this" {
     ignore_changes = [
       description,
       timeouts,
+      public_client,
+      web,
     ]
   }
 }
